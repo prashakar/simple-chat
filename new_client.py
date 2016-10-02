@@ -19,11 +19,17 @@ if __name__ == "__main__":
 		sys.exit()
 	
 	print "Connected to server!"
+	print sock.recv(1024)
 
 	while 1:
 		msg = raw_input("<You> ")
+		while msg == "":
+			print "Please enter a message!"
+			msg = raw_input("<You> ")
 		sock.send(msg)
-		#data = sock.recv(1024)
-		#print data
-		
+		try:
+			data = sock.recv(1024)
+			print data
+		except:
+			pass	
 	

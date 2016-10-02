@@ -14,32 +14,38 @@ class Connections(object):
 		thread.daemon = True
 		thread.start()
 	
+	def broadcast(self,msg):
+                for client in  client_conn:
+                        print client[0]
+			client[0].send(msg)
+	
 	def user_run(self,conn,addr):
 		while True:
 			data = conn.recv(buff_size)
 			if data:
- 	                       print ("<" + str(conn.getpeername()) + "> " + data)
+ 	                	print ("<" + str(conn.getpeername()) + "> " + data)
+				self.broadcast("<" + str(conn.getpeername()) + "> " + data)
 			time.sleep(self.interval)
 
 	def run(self):
 		while True:
-			print "\nListening for client connections"
 			conn, addr = sock.accept()	
 			print "Client connected: (%s,%s)" % addr
 			client_conn.append([conn,addr[0],addr[1]])
 			
+			conn.send(welcome_banner)	
 			user_thread = threading.Thread(target=self.user_run, args=(conn,addr))
 			user_thread.daemon = True
 			user_thread.start()
-			
 			time.sleep(self.interval)
-			
+	
 if __name__ == "__main__":
 	ip = "205.211.159.43"
 	port = int(sys.argv[1])
+	run_time = float(sys.argv[2])*60
 	buff_size = 1024
 	client_conn = []
-
+	welcome_banner = "Hi, welcome to the test server!"
 	#initialize socket module
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	sock.bind((ip,port))
@@ -48,6 +54,14 @@ if __name__ == "__main__":
 
 	listen_conn = Connections()
 	
+	start_time = time.time()
 	while 1:
-		pass
+		elapsed_time = time.time() - start_time
+		if elapsed_time < run_time:
+			print "Remaining time: %s" % (run_time-elapsed_time)
+		if (60 < run_time-elapsed_time < 61):
+			print "One minute remaining!"
+		if (int(elapsed_time) == int(run_time)):
+			print "Terminating server session!"
+		time.sleep(1)
 	sock.close()
