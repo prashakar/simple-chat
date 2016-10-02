@@ -1,15 +1,42 @@
 #!/usr/bin/env python
-import socket
+import socket, select, sys
 
-tcp_ip = "127.0.0.1"
-tcp_port = 5005
-buffer_size = 1024
+def prompt():
+	sys.stdout.write('<You> ')
+	sys.stdout.flush()
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((tcp_ip,tcp_port))
-while 1:
-	message = raw_input("Enter message to send:\n")	
-	s.send(message)
-	data = s.recv(buffer_size)
-s.close()
-print "received data: ",data
+if __name__ == "__main__":
+	if (len(sys.argv) < 3):
+		print "usage: python client.py hostname port"
+	host = sys.argv[1]
+	port = sys.argv[2]
+	
+	s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+	s.settimeout(2)
+
+	try:
+		s.connect((host,port))
+	except:
+		print "unable to connect"
+		sys.exit()
+
+	print "connected to server!"
+	prompt()
+
+	while 1:
+		socket_list = [sys.stdin, s]
+		read_socks,write_socks,error_socks = select.select(socket_list,[],[])
+		
+		for sock in read_socks:
+			if sock == s:
+				data = sock.recv(1024)
+				if not data:
+					print "dissconnected from server"
+					sys.exit()
+				else:
+					sys.stdout.write(data)
+					prompt()
+			else:
+				msg = sys.stdin.readline()
+				s.send(msg)
+				prompt()
