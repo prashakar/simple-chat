@@ -6,12 +6,10 @@ def prompt():
 	sys.stdout.flush()
 
 if __name__ == "__main__":
-	tcp_ip = "127.0.0.1"
+	tcp_ip = "205.211.159.43"
         tcp_port = 5005
 	if (len(sys.argv) < 3):
 		print "usage: python client.py hostname port"
-	host = sys.argv[1]
-	port = sys.argv[2]
 	
 	s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 

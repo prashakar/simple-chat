@@ -11,7 +11,7 @@ def broadcast(sock,message):
 				connection_list.remove(socket)
 
 if __name__ == "__main__":
-	tcp_ip = "127.0.0.1"
+	tcp_ip = "205.211.159.43"
 	tcp_port = 5005
 	buffer_size = 1024
 	#keep track of sockets
@@ -19,15 +19,16 @@ if __name__ == "__main__":
 		
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.bind((tcp_ip,tcp_port))
-	connection_list.append(s)
 	s.listen(10)
+	connection_list.append(s)
 	print "Server started on port %s" % tcp_port
 	
 	while 1:
-		print connection_list
+		print "conn list %s" % connection_list
 		read_socks,write_socks,error_socks = select.select(connection_list,[],[])
-		print read_socks	
+		print "read socks %s" % read_socks	
 		for sock in read_socks:
+			print sock
 			if sock == s:
 				conn, addr = s.accept()
 				connection_list.append(conn)
@@ -39,9 +40,9 @@ if __name__ == "__main__":
 					if data:
 						broadcast(sock,"\r"+'<'+str(sock.getpeername())+'>'+data)
 				except:
-					broadcast(sock,"client at %s is offline" % addr)
+					broadcast(sock,"client at (%s,%s) is offline" % addr)
 					print "Client at (%s,%s) is offline" % addr
 					sock.close()
 					connection_list.remove(sock)
 					continue
-		s.close()
+	s.close()
