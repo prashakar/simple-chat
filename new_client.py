@@ -14,7 +14,7 @@ class MyPrompt(Cmd):
 	def do_quit(self,args):
 		print "Quitting"
 		raise SystemExit
-	def do_msg(self,args):
+	def do_all(self,args):
                 #print args
                 #msg = raw_input("\n<You> ")
                 #while msg == "":
@@ -23,6 +23,9 @@ class MyPrompt(Cmd):
                 sock.send(args)
 	def emptyline(self):
 		pass
+	def do_setuser(self,args):
+		username = args
+		print "Username set to %s" % username
 	
 class Connections(Cmd):
         """
@@ -40,7 +43,7 @@ class Connections(Cmd):
 	        	data = sock.recv(1024)
 			if data:
 				#MyPrompt().do_view("<" + str(sock.getpeername()) + "> " + data)
-	        		print("<" + str(sock.getpeername()) + "> " + data)
+	        		print(data)
 
 			time.sleep(self.interval)
 if __name__ == "__main__":
@@ -48,6 +51,9 @@ if __name__ == "__main__":
 	port = int(sys.argv[1])
 	buff_size = 1024
 
+	username = str(raw_input("Please enter a username: "))
+	print "Thanks! You will now be connected.\n\n"
+	
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	print sock	
 	try:
@@ -61,6 +67,10 @@ if __name__ == "__main__":
 
 	print "Creating listening thread"
 	list2 = Connections()
+	time.sleep(1)
+	print "Sending some data over"
+	sock.send("USERNAME:" + username)
+
 	time.sleep(1)	
 	prompt = MyPrompt()
 	prompt.prompt = '> '

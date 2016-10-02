@@ -14,17 +14,23 @@ class Connections(object):
 		thread.daemon = True
 		thread.start()
 	
-	def broadcast(self,data):
-                for client in  client_conn:
-                        print client[0]
-			client[0].send(data)
+	def broadcast(self,data,conn):
+                for client in client_conn:
+			if client[0] != conn:
+				print client[0]
+				client[0].send("<" + clients[client[0]] + ">" + data)
 	
 	def user_run(self,conn,addr):
 		while True:
 			data = conn.recv(buff_size)
 			if data:
  	                	print ("<" + str(conn.getpeername()) + "> " + data)
-				self.broadcast(data)
+				if data[:8] == "USERNAME":
+					print "Adding user %s to dict" % data[9:]
+					clients[conn] = [data[9:]];
+					print "Total client list: %s" % str(clients)
+				else:
+					self.broadcast(data,conn)
 			time.sleep(self.interval)
 
 	def run(self):
@@ -47,6 +53,7 @@ if __name__ == "__main__":
 	client_conn = []
 	welcome_banner = "Hi, welcome to the test server!"
 	#initialize socket module
+	clients = {}
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	sock.bind((ip,port))
 	sock.listen(10)
