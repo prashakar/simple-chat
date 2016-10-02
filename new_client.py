@@ -22,8 +22,8 @@ class MyPrompt(Cmd):
                 #       msg = raw_input("<You> ")
                 sock.send(args)
 	def emptyline(self):
-		print ">"
-
+		pass
+	
 class Connections(Cmd):
         """
         The run() method will be started and run in background until the application exits
@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
 	print "Creating listening thread"
 	list2 = Connections()
-	
+	time.sleep(1)	
 	prompt = MyPrompt()
 	prompt.prompt = '> '
 	prompt.cmdloop('Starting prompt...')
