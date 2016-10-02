@@ -14,17 +14,17 @@ class Connections(object):
 		thread.daemon = True
 		thread.start()
 	
-	def broadcast(self,msg):
+	def broadcast(self,data):
                 for client in  client_conn:
                         print client[0]
-			client[0].send(msg)
+			client[0].send(data)
 	
 	def user_run(self,conn,addr):
 		while True:
 			data = conn.recv(buff_size)
 			if data:
  	                	print ("<" + str(conn.getpeername()) + "> " + data)
-				self.broadcast("<" + str(conn.getpeername()) + "> " + data)
+				self.broadcast(data)
 			time.sleep(self.interval)
 
 	def run(self):
@@ -33,7 +33,7 @@ class Connections(object):
 			print "Client connected: (%s,%s)" % addr
 			client_conn.append([conn,addr[0],addr[1]])
 			
-			conn.send(welcome_banner)	
+			conn.send(welcome_banner)
 			user_thread = threading.Thread(target=self.user_run, args=(conn,addr))
 			user_thread.daemon = True
 			user_thread.start()
