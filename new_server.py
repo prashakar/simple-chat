@@ -19,13 +19,16 @@ class Connections(object):
 			if server_msg == True:
 				print "Broadcasting to all users"
 				client[0].send(data)
+				continue
 			if backto_client == True:
 				print "Send back to REQUESTER %s" % conn
 				if client[0] == conn:
 					client[0].send(data)
 			if (client[0] == conn) and (direct_client == True):
 				print "Direct message to %s" % conn
+				print "dadasdasdf %s" % data
 				client[0].send(data)
+				break
 			elif client[0] != conn:
 				print conn
 				print client[0]
@@ -66,6 +69,7 @@ class Connections(object):
 							print conn
 							print name[0]
 							if name[0] == user:
+								data = "<DM>" + name[0] + ": " + data
 								self.broadcast(data,conn,direct_client=True)
 								break
 						#self.broadcast(data,conn)

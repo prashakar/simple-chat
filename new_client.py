@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import socket, sys, threading, time
+import socket, sys, threading, time, re
 from cmd import Cmd
 
 class MyPrompt(Cmd):
@@ -17,8 +17,8 @@ class MyPrompt(Cmd):
 	def do_all(self,args):
 		sock.send(args)
 	def do_msg(self,args):
-		args = args.split()
-		sock.send("DIRECT:"+args[0]+"MSG:"+args[1])
+		print args.split(' ',1)[0]
+		sock.send("DIRECT:"+args.split(' ',1)[0]+"MSG:"+args)
                 #print args
                 #msg = raw_input("\n<You> ")
                 #while msg == "":
