@@ -15,18 +15,23 @@ class MyPrompt(Cmd):
 		print "Quitting"
 		raise SystemExit
 	def do_all(self,args):
+		sock.send(args)
+	def do_msg(self,args):
+		args = args.split()
+		sock.send("DIRECT:"+args[0]+"MSG:"+args[1])
                 #print args
                 #msg = raw_input("\n<You> ")
                 #while msg == "":
                 #       print "Please enter a message!"
                 #       msg = raw_input("<You> ")
-                sock.send(args)
 	def emptyline(self):
 		pass
 	def do_setuser(self,args):
 		username = args
 		print "Username set to %s" % username
-	
+	def do_list(self,args):
+		sock.send("USER_REQUEST")
+
 class Connections(Cmd):
         """
         The run() method will be started and run in background until the application exits
@@ -52,7 +57,7 @@ if __name__ == "__main__":
 	buff_size = 1024
 
 	username = str(raw_input("Please enter a username: "))
-	print "Thanks! You will now be connected.\n\n"
+	print "Thanks! You will now be connected.\n"
 	
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	print sock	
@@ -62,10 +67,10 @@ if __name__ == "__main__":
 		print "Unable to connect!"
 		sys.exit()
 	
-	print "Connected to server!"
+	print "Sucessfully connected to the server!"
 	#print sock.recv(1024)
 
-	print "Creating listening thread"
+	print "Creating listening thread\n"
 	list2 = Connections()
 	time.sleep(1)
 	print "Sending some data over"
