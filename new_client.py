@@ -4,20 +4,13 @@ import socket, sys, threading, time, re
 from cmd import Cmd
 
 class MyPrompt(Cmd):
-	def do_hello(self, args):
-	        """Says hello. If you provide a name, it will greet you with it."""
-	        if len(args) == 0:
-	            name = 'stranger'
-	        else:
-	            name = args
-	        print "Hello, %s" % name
 	def do_quit(self,args):
 		print "Quitting"
 		raise SystemExit
 	def do_all(self,args):
 		sock.send(args)
 	def do_msg(self,args):
-		print args.split(' ',1)[0]
+		#print args.split(' ',1)[0]
 		sock.send("DIRECT:"+args.split(' ',1)[0]+"MSG:"+args)
                 #print args
                 #msg = raw_input("\n<You> ")
@@ -26,9 +19,6 @@ class MyPrompt(Cmd):
                 #       msg = raw_input("<You> ")
 	def emptyline(self):
 		pass
-	def do_setuser(self,args):
-		username = args
-		print "Username set to %s" % username
 	def do_list(self,args):
 		sock.send("USER_REQUEST")
 
@@ -52,8 +42,8 @@ class Connections(Cmd):
 
 			time.sleep(self.interval)
 if __name__ == "__main__":
-	ip = "205.211.159.43"
-	port = int(sys.argv[1])
+	ip = str(sys.argv[1])
+	port = int(sys.argv[2])
 	buff_size = 1024
 
 	username = str(raw_input("Please enter a username: "))

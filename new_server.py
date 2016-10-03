@@ -91,9 +91,9 @@ class Connections(object):
 			time.sleep(self.interval)
 	
 if __name__ == "__main__":
-	ip = "205.211.159.43"
-	port = int(sys.argv[1])
-	run_time = float(sys.argv[2])*60
+	ip = str(sys.argv[1])
+	port = int(sys.argv[2])
+	run_time = float(sys.argv[3])*60
 	buff_size = 1024
 	client_conn = []
 	welcome_banner = "Hi, welcome to the test server!"

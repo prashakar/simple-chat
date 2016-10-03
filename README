@@ -1,0 +1,33 @@
+# simple-chat
+Chat application using TCP
+
+Requires:
+Python 2.7
+sudo apt-get install python (on Ubunutu)
+
+Usage:
+
+------SERVER------
+
+python new_server.py [host_ip] [port] [server duration]
+	EXAMPLE: python new_server.py 10.170.0.80 5003 1.2
+Server script is now executed. No additional work needed.
+
+------------------
+
+------CLIENT------
+
+python new_client.py [server_ip] [port]
+	EXAMPLE: python new_client.py 10.170.0.80 5003
+
+Enter username
+
+**TYPE HELP FOR POSSIBLE COMMANDS**
+
+From here you can enter one of the following commands to get started:
+	list - lists all clients connected to the server
+	all [MESSAGE] - sends message to all clients connected
+	msg [CLIENT_NAME] [MESSAGE] - sends message to specified client only
+	quit - quits the server
+
+-------------------
